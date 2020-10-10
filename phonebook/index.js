@@ -50,6 +50,13 @@ app.get('/api/Persons/:id', (req, res) => {
     }
 })
 
+app.delete('/api/Persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    persons = persons.filter(currentPerson => currentPerson.id !== id)
+
+    res.status(204).end()
+})
+
 app.get('/info', (req, res) => {
     const numberOfPeople = persons.length
 
