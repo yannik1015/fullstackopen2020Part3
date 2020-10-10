@@ -1,10 +1,11 @@
+const { response } = require('express')
 const express = require('express')
 const app = express()
 
 app.use(express.json())
 
 let persons = [
-{
+    {
     id: 1,
     name: "Arto Hellas",
     number: "040-123456"
@@ -31,8 +32,22 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
   })
 
-app.get('/Persons', (req, res) => {
+app.get('/api/Persons', (req, res) => {
     res.json(persons)
+})
+
+app.get('/api/Persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+
+    const person = persons.find(currentPerson => currentPerson.id === id)
+
+    console.log(person)
+
+    if(person) {
+        res.json(person)
+    }else {
+        res.status(404).end()
+    }
 })
 
 app.get('/info', (req, res) => {
