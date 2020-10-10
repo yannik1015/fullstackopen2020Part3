@@ -27,6 +27,11 @@ let persons = [
     }
 ]
 
+function generateId() {
+    let id = Math.ceil(Math.random()*5000)
+
+    return id
+}
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
@@ -75,24 +80,25 @@ app.post('/api/Persons', (req, res) => {
         })
     }
 
-    const id = Math.ceil(Math.random()*5000)
-    let person = {}
-
     if(!body.number) {
-        person = {
-            id: id,
-            name: body.name,
-            number: ''
-        }
-    }else {
-        person = {
-            id: id,
-            name: body.name,
-            number: String(body.number)
-        }
+        return res.status(400).json({
+            error: 'number missing'
+        })
     }
 
-    console.log("newPerson", person)
+    const id = generateId()
+    
+    if(persons.find(currentPerson => currentPerson.name === body.name)) {
+        return res.status(418).json({
+            error: 'Person already exists'
+        })
+    }
+
+    const person = {
+        id: id,
+        name: body.name,
+        number: String(body.number)
+    }
 
     persons = persons.concat(person)
 
